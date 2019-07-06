@@ -23,11 +23,25 @@ class LandingPage extends Component {
     };
   }
 
+  getContributorCount = async (url) => {
+    const result = await get(url);
+    return result.length;
+  }
+
+  addContributorCount = async (item) => {
+    const contributorCount = await this.getContributorCount(item.contributors_url);
+    return {
+      ...item,
+      contributors_count: contributorCount,
+    };
+  }
+
   fetchRepos = async (value) => {
     const url = constructUrl(REPOSITORY_API_URL, value);
     const result = await get(url);
+    const items = result.items.map(await this.addContributorCount);
     this.setState({
-      repositories: result.items,
+      repositories: items,
       isLoaded: true,
     });
   }

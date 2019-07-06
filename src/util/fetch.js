@@ -31,17 +31,25 @@ const formatOptions = (options, body) => ({
   body: JSON.stringify(body),
 });
 
-const handleFetch = async (url, options = {}) => fetch(url, {
-  ...options,
-}).then(handleBadResponses)
-  .then(handleJson);
+const handleAuthorizedFetch = async (url, options = {}) => {
+  const headers = {
+    ...options.headers,
+  };
+  headers.Authorization = `token ${process.env.REACT_APP_AUTHORIZATION_TOKEN}`;
 
-export const get = async (url, options = {}) => handleFetch(url, {
+  return fetch(url, {
+    ...options,
+    headers,
+  }).then(handleBadResponses)
+    .then(handleJson);
+};
+
+export const get = async (url, options = {}) => handleAuthorizedFetch(url, {
   ...options,
   method: 'GET',
 });
 
-export const post = async (url, body, options = {}) => handleFetch(url, {
+export const post = async (url, body, options = {}) => handleAuthorizedFetch(url, {
   ...formatOptions(options, body),
   method: 'POST',
 });
