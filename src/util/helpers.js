@@ -1,7 +1,9 @@
-const constructUrl = (apiUrl, query) => {
+const constructUrl = (apiUrl, search) => {
   const url = new URL(apiUrl.host);
-  url.pathname = apiUrl.pathname;
-  url.search = `q=${query}${apiUrl.search}`;
+  if (apiUrl.pathname) {
+    url.pathname = apiUrl.pathname;
+  }
+  url.search = search ? `q=${search}${apiUrl.query}` : apiUrl.query;
   return url;
 };
 

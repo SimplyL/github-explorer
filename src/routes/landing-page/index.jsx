@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
 
-import { get } from '../../util/fetch';
+import { get, getLinkHeaders } from '../../util/fetch';
 import REPOSITORY_API_URL from '../../constants/api';
 import constructUrl from '../../util/helpers';
 import TextInput from '../../components/text-input';
@@ -24,15 +24,19 @@ class LandingPage extends Component {
   }
 
   getContributorCount = async (url) => {
-    const result = await get(url);
-    return result.length;
+    const fullUrl = constructUrl({
+      host: url,
+      query: 'anon=true&per_page=1',
+    });
+    const result = await getLinkHeaders(fullUrl);
+    return result ? result.last.page : 0;
   }
 
   addContributorCount = async (item) => {
-    const contributorCount = await this.getContributorCount(item.contributors_url);
+    const contributors_count = await this.getContributorCount(item.contributors_url);
     return {
       ...item,
-      contributors_count: contributorCount,
+      contributors_count,
     };
   }
 
@@ -40,8 +44,9 @@ class LandingPage extends Component {
     const url = constructUrl(REPOSITORY_API_URL, value);
     const result = await get(url);
     const items = result.items.map(await this.addContributorCount);
+    const updatedItems = await Promise.all(items);
     this.setState({
-      repositories: items,
+      repositories: updatedItems,
       isLoaded: true,
     });
   }
