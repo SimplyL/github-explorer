@@ -24,18 +24,18 @@ class LandingPage extends Component {
     };
   }
 
-  getCommitCount = async () => {
-    const fullUrl = constructUrl({
-      host: 'https://api.github.com/search/commits',
-      query: '+created:>=2019-01-01',
-    }, 'facebook/flow');
-    const result = await get(fullUrl, {
-      headers: {
-        Accept: 'application/vnd.github.cloak-preview',
-      },
-    });
-    console.log(result);
-  };
+  // getCommitCount = async () => {
+  //   const fullUrl = constructUrl({
+  //     host: 'https://api.github.com/search/commits',
+  //     query: '+created:>=2019-01-01',
+  //   }, 'facebook/flow');
+  //   const result = await get(fullUrl, {
+  //     headers: {
+  //       Accept: 'application/vnd.github.cloak-preview',
+  //     },
+  //   });
+  //   console.log(result);
+  // };
 
   addContributorCount = async (item) => {
     const contributors_count = await getContributorCount(item.contributors_url);
@@ -79,7 +79,7 @@ class LandingPage extends Component {
 
   render() {
     const { repositories, isLoaded } = this.state;
-    console.log(this.getCommitCount());
+    // console.log(this.getCommitCount());
     return (
       <>
         <TextInput

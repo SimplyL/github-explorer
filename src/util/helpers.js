@@ -1,11 +1,11 @@
 import { getLinkHeaders } from './fetch';
 
-const constructUrl = (apiUrl, search) => {
-  const url = new URL(apiUrl.host);
-  if (apiUrl.pathname) {
-    url.pathname = apiUrl.pathname;
+const constructUrl = ({ host, pathname, query = '' }, search) => {
+  const url = new URL(host);
+  if (pathname) {
+    url.pathname = pathname;
   }
-  url.search = search ? `q=${search}${apiUrl.query}` : apiUrl.query;
+  url.search = search ? `q=${search}${query}` : query;
   return url;
 };
 
