@@ -11,6 +11,7 @@
       {
         "devDependencies": true
       }
-    ]
+    ],
+    "react/forbid-prop-types": 0
   }
 }
