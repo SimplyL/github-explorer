@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
 
-import { get, getLinkHeaders } from '../../util/fetch';
+import { PATH_REPOSITORY } from '../../constants/paths';
+import { get } from '../../util/fetch';
 import REPOSITORY_API_URL from '../../constants/api';
-import constructUrl from '../../util/helpers';
+import { constructUrl, getContributorCount } from '../../util/helpers';
 import TextInput from '../../components/text-input';
 import Loader from '../../components/loader/loader.styles';
 import ItemList from '../../components/item-list';
 
 class LandingPage extends Component {
-  // static propTypes = {
-  //   prop: PropTypes,
-  // }
+  static propTypes = {
+    history: PropTypes.object.isRequired,
+  }
 
   constructor(props) {
     super(props);
@@ -23,17 +24,21 @@ class LandingPage extends Component {
     };
   }
 
-  getContributorCount = async (url) => {
+  getCommitCount = async () => {
     const fullUrl = constructUrl({
-      host: url,
-      query: 'anon=true&per_page=1',
+      host: 'https://api.github.com/search/commits',
+      query: '+created:>=2019-01-01',
+    }, 'facebook/flow');
+    const result = await get(fullUrl, {
+      headers: {
+        Accept: 'application/vnd.github.cloak-preview',
+      },
     });
-    const result = await getLinkHeaders(fullUrl);
-    return result ? result.last.page : 0;
-  }
+    console.log(result);
+  };
 
   addContributorCount = async (item) => {
-    const contributors_count = await this.getContributorCount(item.contributors_url);
+    const contributors_count = await getContributorCount(item.contributors_url);
     return {
       ...item,
       contributors_count,
@@ -66,8 +71,15 @@ class LandingPage extends Component {
     }
   }
 
+  handleClick = (repoName) => {
+    const { history } = this.props;
+    history.push(`${PATH_REPOSITORY}/${repoName}`);
+  };
+
+
   render() {
     const { repositories, isLoaded } = this.state;
+    console.log(this.getCommitCount());
     return (
       <>
         <TextInput
@@ -76,7 +88,7 @@ class LandingPage extends Component {
         />
         {!isLoaded
           ? <Loader />
-          : <ItemList items={repositories} />
+          : <ItemList items={repositories} onClick={this.handleClick} />
         }
       </>
     );

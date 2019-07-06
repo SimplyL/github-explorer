@@ -11,7 +11,7 @@ import {
   ItemName,
 } from './item-list.styles';
 
-function Item({ item }) {
+function Item({ item, onClick }) {
   const {
     stargazers_count,
     full_name,
@@ -24,9 +24,8 @@ function Item({ item }) {
     contributors_count,
   } = item;
 
-  console.log(item);
   return (
-    <ItemContainer>
+    <ItemContainer onClick={() => onClick(full_name)}>
       <div>
         <ItemName>
           <a href={html_url}>{full_name}</a>
@@ -51,8 +50,13 @@ function Item({ item }) {
   );
 }
 
+Item.defaultProps = {
+  onClick: () => {},
+};
+
 Item.propTypes = {
   item: PropTypes.object.isRequired,
+  onClick: PropTypes.func,
 };
 
 export default Item;

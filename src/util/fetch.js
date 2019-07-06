@@ -58,6 +58,6 @@ export const post = async (url, body, options = {}) => handleAuthorizedFetch(url
 
 export const getLinkHeaders = async (url, options = {}) => fetch(url, {
   ...options,
-  method: 'GET',
+  method: 'HEAD',
   headers: getAuthHeaders(options),
 }).then(res => parse(res.headers.get('Link')));
