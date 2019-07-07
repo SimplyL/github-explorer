@@ -23,6 +23,13 @@ const handleJson = async (response) => {
   return shouldHaveBody ? response.json() : response;
 };
 
+const handleNotFound = (error) => {
+  if (error.status === status.NOT_FOUND) {
+    return error.status;
+  }
+  throw error;
+};
+
 const formatOptions = (options, body) => ({
   ...options,
   headers: {
@@ -44,7 +51,8 @@ const handleAuthorizedFetch = async (url, options = {}) => fetch(url, {
   ...options,
   headers: getAuthHeaders(options),
 }).then(handleBadResponses)
-  .then(handleJson);
+  .then(handleJson)
+  .catch(handleNotFound);
 
 export const get = async (url, options = {}) => handleAuthorizedFetch(url, {
   ...options,
@@ -54,6 +62,16 @@ export const get = async (url, options = {}) => handleAuthorizedFetch(url, {
 export const post = async (url, body, options = {}) => handleAuthorizedFetch(url, {
   ...formatOptions(options, body),
   method: 'POST',
+});
+
+export const put = async (url, options = {}, body) => handleAuthorizedFetch(url, {
+  ...formatOptions(options, body),
+  method: 'PUT',
+});
+
+export const del = async (url, options = {}, body) => handleAuthorizedFetch(url, {
+  ...formatOptions(options, body),
+  method: 'DELETE',
 });
 
 export const getLinkHeaders = async (url, options = {}) => fetch(url, {

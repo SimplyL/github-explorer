@@ -5,10 +5,16 @@ import debounce from 'lodash.debounce';
 import { PATH_REPOSITORY } from '../../constants/paths';
 import { get } from '../../util/fetch';
 import REPOSITORY_API_URL from '../../constants/api';
-import { constructUrl, getContributorCount } from '../../util/helpers';
+import {
+  constructUrl,
+  getContributorCount,
+  getStargazerStatus,
+} from '../../util/helpers';
 import TextInput from '../../components/text-input';
 import Loader from '../../components/loader/loader.styles';
 import ItemList from '../../components/item-list';
+import EmptyView from '../../components/empty-view';
+import SearchContainer from './landing-page.styles';
 
 class LandingPage extends Component {
   static propTypes = {
@@ -24,24 +30,14 @@ class LandingPage extends Component {
     };
   }
 
-  // getCommitCount = async () => {
-  //   const fullUrl = constructUrl({
-  //     host: 'https://api.github.com/search/commits',
-  //     query: '+created:>=2019-01-01',
-  //   }, 'facebook/flow');
-  //   const result = await get(fullUrl, {
-  //     headers: {
-  //       Accept: 'application/vnd.github.cloak-preview',
-  //     },
-  //   });
-  //   console.log(result);
-  // };
-
   addContributorCount = async (item) => {
     const contributors_count = await getContributorCount(item.contributors_url);
+    const [owner, repo] = item.full_name.split('/');
+    const isStarred = await getStargazerStatus({ owner, repo });
     return {
       ...item,
       contributors_count,
+      isStarred,
     };
   }
 
@@ -56,7 +52,6 @@ class LandingPage extends Component {
     });
   }
 
-  // eslint-disable-next-line react/sort-comp
   debouncedSearch = debounce(
     this.fetchRepos,
     300,
@@ -79,13 +74,15 @@ class LandingPage extends Component {
 
   render() {
     const { repositories, isLoaded } = this.state;
-    // console.log(this.getCommitCount());
     return (
       <>
-        <TextInput
-          placeholder="Search..."
-          onChange={this.handleChange}
-        />
+        <SearchContainer>
+          <TextInput
+            placeholder="Search..."
+            onChange={this.handleChange}
+          />
+        </SearchContainer>
+        {!repositories.length && isLoaded && <EmptyView text="Search for repositories..." />}
         {!isLoaded
           ? <Loader />
           : <ItemList items={repositories} onClick={this.handleClick} />
