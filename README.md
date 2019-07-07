@@ -4,24 +4,24 @@ To be able torun the application, rename .env.example file to .env
 and provide your personal token, which can be aquired here:
 https://github.com/settings/tokens
 
-# npm start
+#### npm start
 To run application in local environmennt
 
 ### Used stack
 
-# React
+#### React
 For all application development
 
-# Create-react-app
+#### Create-react-app
 To speed up project setup
 
-# Styled-components
+#### Styled-components
 For styling
 
-# React-router-dom
+#### React-router-dom
 For routing through application
 
-# Jest and Enzyme
+#### Jest and Enzyme
 For unit tests
 
 ### Notes
