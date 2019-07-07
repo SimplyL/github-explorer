@@ -2,15 +2,15 @@ import styled from 'styled-components';
 
 const Loader = styled.div`
   border-radius: 50%;
-  width: 10em;
-  height: 10em;
+  width: 6em;
+  height: 6em;
 
     &:after {
       border-radius: 50%;
-      width: 10em;
-      height: 10em;
+      width: 6em;
+      height: 6em;
     }
-  margin: 60px auto;
+  margin: 30px auto;
   font-size: 10px;
   position: relative;
   text-indent: -9999em;

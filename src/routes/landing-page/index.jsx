@@ -10,7 +10,7 @@ import {
   getContributorCount,
   getStargazerStatus,
 } from '../../util/helpers';
-import TextInput from '../../components/text-input';
+import TextInput from '../../components/text-input/text-input.styles';
 import Loader from '../../components/loader/loader.styles';
 import ItemList from '../../components/item-list';
 import EmptyView from '../../components/empty-view';
@@ -30,7 +30,7 @@ class LandingPage extends Component {
     };
   }
 
-  addContributorCount = async (item) => {
+  fetchAdditionalDetails = async (item) => {
     const contributors_count = await getContributorCount(item.contributors_url);
     const [owner, repo] = item.full_name.split('/');
     const isStarred = await getStargazerStatus({ owner, repo });
@@ -41,10 +41,11 @@ class LandingPage extends Component {
     };
   }
 
-  fetchRepos = async (value) => {
-    const url = constructUrl(REPOSITORY_API_URL, value);
-    const result = await get(url);
-    const items = result.items.map(await this.addContributorCount);
+  fetchRepos = async (query) => {
+    this.setState({ isLoaded: false });
+    const url = constructUrl(REPOSITORY_API_URL, query);
+    const repositories = await get(url);
+    const items = repositories.items.map(await this.fetchAdditionalDetails);
     const updatedItems = await Promise.all(items);
     this.setState({
       repositories: updatedItems,
@@ -54,12 +55,11 @@ class LandingPage extends Component {
 
   debouncedSearch = debounce(
     this.fetchRepos,
-    300,
+    500,
   );
 
   handleChange = (evt) => {
     if (evt.target.value.length > 2) {
-      this.setState({ isLoaded: false });
       this.debouncedSearch(evt.target.value);
     } else {
       this.setState({ repositories: [] });
@@ -70,7 +70,6 @@ class LandingPage extends Component {
     const { history } = this.props;
     history.push(`${PATH_REPOSITORY}/${repoName}`);
   };
-
 
   render() {
     const { repositories, isLoaded } = this.state;

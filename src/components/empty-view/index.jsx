@@ -3,14 +3,12 @@ import PropTypes from 'prop-types';
 
 import { Container, Icon } from './empty-view.styles';
 
-function EmptyView({ text }) {
-  return (
-    <Container>
-      <Icon />
-      {text}
-    </Container>
-  );
-}
+const EmptyView = ({ text }) => (
+  <Container>
+    <Icon />
+    {text}
+  </Container>
+);
 
 EmptyView.propTypes = {
   text: PropTypes.string.isRequired,

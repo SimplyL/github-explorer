@@ -7,10 +7,12 @@ const ItemContainer = styled.div`
   grid-template-rows: auto auto;
   grid-row-gap: 20px;
   margin-bottom: 15px;
-  cursor: pointer;
-  &:hover {
-    background-color: #e6f7ff;
-  }
+  ${({ hasName }) => (hasName ? `
+    cursor: pointer;
+    &:hover {
+      background-color: #e6f7ff;
+    }` : 'cursor: default;')
+}
 `;
 
 const ItemName = styled.div`
@@ -50,7 +52,7 @@ const Description = styled.div`
 const Statistics = styled.div`
   width: fit-content;
   display: grid;
-  grid-template-columns: repeat(5, auto);
+  grid-template-columns: repeat(6, auto);
   grid-column-gap: 25px;
   align-items: center;
 `;
@@ -59,7 +61,7 @@ const Stats = styled.div`
   display: grid;
   width: fit-content;
   align-items: center;
-  grid-template-columns:auto auto;
+  grid-template-columns: auto auto;
   grid-column-gap: 5px;
 `;
 
@@ -67,7 +69,7 @@ const Details = styled.div`
   display: grid;
   width: 300px;
   align-items: center;
-  grid-template-columns:200px 100px;
+  grid-template-columns: 200px 100px;
   grid-column-gap: 15px;
   > div {
     white-space: nowrap;
@@ -86,6 +88,7 @@ const AnchorButton = styled.button`
     text-decoration: underline;
   }
 `;
+AnchorButton.displayName = 'AnchorButton';
 
 export {
   ItemContainer,

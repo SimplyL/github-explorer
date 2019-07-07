@@ -1,7 +1,7 @@
 import { GITHUB_API, GITHUB_STARRING_PATH } from '../constants/api';
 import { getLinkHeaders, get } from './fetch';
 
-const constructUrl = ({ host, pathname, query = '' }, search) => {
+const constructUrl = ({ host = GITHUB_API, pathname, query = '' }, search) => {
   const url = new URL(host);
   if (pathname) {
     url.pathname = pathname;
@@ -21,7 +21,6 @@ const getContributorCount = async (url) => {
 
 const getStargazerStatus = async (params) => {
   const url = constructUrl({
-    host: GITHUB_API,
     pathname: `${GITHUB_STARRING_PATH}/${params.owner}/${params.repo}`,
   });
   const result = await get(url);

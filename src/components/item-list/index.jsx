@@ -12,9 +12,7 @@ const renderItem = (item, onClick) => (
 );
 
 const ItemList = ({ items, onClick }) => (
-  <div>
-    {items.map(item => renderItem(item, onClick))}
-  </div>
+  items.map(item => renderItem(item, onClick))
 );
 
 ItemList.propTypes = {

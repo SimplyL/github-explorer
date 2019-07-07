@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import StyledButton from './button.styles';
 
-const Button = ({ onClick, label, isPrimary }) => (
+const Button = ({ onClick, text, isPrimary }) => (
   <StyledButton
     type="button"
     onClick={onClick}
     isPrimary={isPrimary}
   >
-    {label}
+    {text}
   </StyledButton>
 );
 
@@ -18,7 +18,7 @@ Button.defaultProps = {
 
 Button.propTypes = {
   onClick: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
   isPrimary: PropTypes.bool,
 };
 

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import {
-  GITHUB_API,
   GITHUB_REPOS_PATH,
   GITHUB_STARRING_PATH,
 } from '../../constants/api';
@@ -13,6 +12,8 @@ import Chart from '../../components/chart';
 import Button from '../../components/button';
 import Loader from '../../components/loader/loader.styles';
 import { HeaderContainer, AnchorLink } from './repository-details.styles';
+
+const requestHeaders = { headers: { 'Content-Length': '0' } };
 
 class RepositoryDetails extends Component {
   static propTypes = {
@@ -44,12 +45,14 @@ class RepositoryDetails extends Component {
       repository.open_issues_count,
       activityData.all,
     );
+    const totalHours = this.calculateTotalHours(effectiveHours);
 
     this.setState({
       repository: {
         ...repository,
         contributors_count,
         isStarred,
+        totalHours,
       },
       effectiveHours,
     });
@@ -57,9 +60,7 @@ class RepositoryDetails extends Component {
 
   getRepository = async (params) => {
     const url = constructUrl({
-      host: GITHUB_API,
       pathname: `${GITHUB_REPOS_PATH}/${params.owner}/${params.repo}`,
-      query: '',
     });
     const result = await get(url);
     return result;
@@ -67,12 +68,15 @@ class RepositoryDetails extends Component {
 
   getActivityData = async (params) => {
     const url = constructUrl({
-      host: GITHUB_API,
       pathname: `${GITHUB_REPOS_PATH}/${params.owner}/${params.repo}/stats/participation`,
     });
     const result = await get(url);
     return result;
   }
+
+  calculateTotalHours = effectiveHours => effectiveHours.reduce((accumulator, current) => (
+    accumulator + current.value.hours
+  ), 0);
 
   calculateEffectiveHours = (contributors, issues, activity) => activity.map((commits, index) => {
     const hours = Math.round(commits * contributors / (issues || 1));
@@ -86,12 +90,12 @@ class RepositoryDetails extends Component {
   })
 
   starRepository = async (url) => {
-    const response = await put(url, { headers: { 'Content-Length': '0' } });
+    const response = await put(url, requestHeaders);
     return response !== 404;
   }
 
   unstarRepository = async (url) => {
-    const response = await del(url, { headers: { 'Content-Length': '0' } });
+    const response = await del(url, requestHeaders);
     return response === 404;
   }
 
@@ -102,8 +106,8 @@ class RepositoryDetails extends Component {
       },
     } = this.props;
     const { repository } = this.state;
+    const { stargazers_count } = repository;
     const url = constructUrl({
-      host: GITHUB_API,
       pathname: `${GITHUB_STARRING_PATH}/${params.owner}/${params.repo}`,
     });
     const isStarred = !repository.isStarred
@@ -113,6 +117,7 @@ class RepositoryDetails extends Component {
     this.setState({
       repository: {
         ...repository,
+        stargazers_count: isStarred ? stargazers_count + 1 : stargazers_count - 1,
         isStarred,
       },
     });
@@ -134,7 +139,7 @@ class RepositoryDetails extends Component {
                 {repository.full_name}
               </AnchorLink>
               <Button
-                label={!repository.isStarred ? 'Star' : 'Unstar'}
+                text={!repository.isStarred ? 'Star' : 'Unstar'}
                 onClick={this.handleClick}
                 isPrimary={!repository.isStarred}
               />

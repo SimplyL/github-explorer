@@ -12,7 +12,6 @@ import {
 
 import { Container, Label } from './chart.styles';
 
-const formatTooltipValue = (value, name) => [value, name];
 const formatTooltipLabel = label => `Week: ${label}`;
 
 const Chart = ({ data, label }) => (
@@ -25,7 +24,6 @@ const Chart = ({ data, label }) => (
         <YAxis width={30} />
         <Tooltip
           isAnimationActive={false}
-          formatter={formatTooltipValue}
           labelFormatter={formatTooltipLabel}
         />
         <Line type="monotone" dataKey="value.hours" name="Effective hours" stroke="#8884d8" />

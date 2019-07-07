@@ -5,24 +5,22 @@ import LandingPage from './routes/landing-page';
 import RepositoryDetails from './routes/repository-details';
 import { ContentArea, InnerContainer } from './App.styles';
 
-function App() {
-  return (
-    <ContentArea>
-      <InnerContainer>
-        <Router>
-          <Route
-            path={PATHS.home}
-            component={LandingPage}
-            exact
-          />
-          <Route
-            path={PATHS.repository}
-            component={RepositoryDetails}
-          />
-        </Router>
-      </InnerContainer>
-    </ContentArea>
-  );
-}
+const App = () => (
+  <ContentArea>
+    <InnerContainer>
+      <Router>
+        <Route
+          path={PATHS.home}
+          component={LandingPage}
+          exact
+        />
+        <Route
+          path={PATHS.repository}
+          component={RepositoryDetails}
+        />
+      </Router>
+    </InnerContainer>
+  </ContentArea>
+);
 
 export default App;

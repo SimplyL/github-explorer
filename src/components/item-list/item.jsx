@@ -7,6 +7,7 @@ import { ReactComponent as StargazerIcon } from '../../assets/svg/star.svg';
 import { ReactComponent as ForkIcon } from '../../assets/svg/repo-forked.svg';
 import { ReactComponent as OctofaceIcon } from '../../assets/svg/octoface.svg';
 import { ReactComponent as OpenedIssueIcon } from '../../assets/svg/issue-opened.svg';
+import { ReactComponent as ClockIcon } from '../../assets/svg/clock.svg';
 import {
   ItemContainer,
   ItemName,
@@ -22,7 +23,7 @@ import {
 
 const handleClick = (e, url) => {
   e.stopPropagation();
-  window.location.href = url;
+  window.location.assign(url);
 };
 
 const Item = ({ item, onClick, hasName }) => {
@@ -37,10 +38,11 @@ const Item = ({ item, onClick, hasName }) => {
     open_issues_count,
     contributors_count,
     isStarred,
+    totalHours,
   } = item;
 
   return (
-    <ItemContainer onClick={() => onClick(full_name)}>
+    <ItemContainer onClick={() => onClick(full_name)} hasName={hasName}>
       <MainContent>
         <TitleContainer>
           {hasName
@@ -72,6 +74,12 @@ const Item = ({ item, onClick, hasName }) => {
             {language}
           </div>
         </Details>
+        {(totalHours || totalHours === 0) && (
+          <Stats>
+            <ClockIcon />
+            {totalHours}
+          </Stats>
+        )}
         <Stats>
           <StargazerIcon />
           {stargazers_count}
