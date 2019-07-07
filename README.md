@@ -1,6 +1,6 @@
 ### Application setup
 
-To be able torun the application, rename .env.example file to .env
+To be able to run the application, rename .env.example file to .env
 and provide your personal token, which can be aquired here:
 https://github.com/settings/tokens
 
@@ -27,5 +27,5 @@ For unit tests
 ### Notes
 
 Contributor count is not provided by github repository search api,
-I implemented a work arround using pagination query for contributor list api and extracting data from response headers.
+I implemented a workaround using pagination query for contributor list api and extracting data from response headers.
 This gives more results, but results do not seem to always match the actual contributor count.
