@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {
   GITHUB_REPOS_PATH,
   GITHUB_STARRING_PATH,
+  GUTHUB_ACTIVITY_PATH,
 } from '../../constants/api';
 import { get, put, del } from '../../util/fetch';
 import { constructUrl, getContributorCount, getStargazerStatus } from '../../util/helpers';
@@ -68,7 +69,7 @@ class RepositoryDetails extends Component {
 
   getActivityData = async (params) => {
     const url = constructUrl({
-      pathname: `${GITHUB_REPOS_PATH}/${params.owner}/${params.repo}/stats/participation`,
+      pathname: `${GITHUB_REPOS_PATH}/${params.owner}/${params.repo}/${GUTHUB_ACTIVITY_PATH}`,
     });
     const result = await get(url);
     return result;
