@@ -1,11 +1,14 @@
 ### Application setup
 
 To be able to run the application, rename .env.example file to .env
-and provide your personal token, which can be aquired here:
+and provide your personal token, which can be acquired here:
 https://github.com/settings/tokens
 
+#### npm install
+To install needed packages
+
 #### npm start
-To run application in local environmennt
+To run application in local environment
 
 ### Used stack
 
